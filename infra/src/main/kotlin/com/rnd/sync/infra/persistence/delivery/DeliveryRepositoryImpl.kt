@@ -1,8 +1,8 @@
 package com.rnd.sync.infra.persistence.delivery
 
+import com.rnd.sync.application.domain.delivery.DeliveryDecomposite
 import com.rnd.sync.application.domain.delivery.Delivery
-import com.rnd.sync.application.domain.delivery.DeliveryComposite
-import com.rnd.sync.application.domain.delivery.DeliveryComposite.DeliveryId
+import com.rnd.sync.application.domain.delivery.Delivery.DeliveryId
 import com.rnd.sync.application.service.delivery.out.DeliveryRepository
 import com.rnd.sync.infra.persistence.delivery.entity.DeliveryEntityMapper
 import com.rnd.sync.infra.persistence.delivery.jpa.DeliveryJpaRepository
@@ -14,8 +14,8 @@ class DeliveryRepositoryImpl(
     private val deliveryEntityMapper: DeliveryEntityMapper,
     private val deliveryJpaRepository: DeliveryJpaRepository
 ): DeliveryRepository {
-    override fun save(deliveryComposite: DeliveryComposite): DeliveryId {
-        val entity = deliveryEntityMapper.fromDeliveryCompositeToNewDeliveryEntity(deliveryComposite)
+    override fun save(delivery: Delivery): DeliveryId {
+        val entity = deliveryEntityMapper.fromDeliveryCompositeToNewDeliveryEntity(delivery)
         val savedEntity = deliveryJpaRepository.save(entity)
         val entityId = savedEntity.id ?: throw EntityNotFoundException()
 
@@ -23,7 +23,7 @@ class DeliveryRepositoryImpl(
         return deliveryId
     }
 
-    override fun get(deliveryId: DeliveryId): Delivery {
+    override fun get(deliveryId: DeliveryId): DeliveryDecomposite {
         val foundEntity = deliveryJpaRepository.findById(deliveryId.id)
             .orElseThrow { EntityNotFoundException("Delivery with id $deliveryId not found") }
 

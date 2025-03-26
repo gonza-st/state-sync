@@ -6,7 +6,7 @@ import com.rnd.sync.application.domain.delivery.state.DeliveryCreatedState
 import com.rnd.sync.application.domain.delivery.state.DeliveryDelayedState
 import com.rnd.sync.application.domain.delivery.state.DeliveryStartedState
 import com.rnd.sync.application.domain.delivery.state.DeliveryState
-import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan.DeliveryPlanId
+import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
 import com.rnd.sync.application.domain.order.Order.OrderId
 
 class Delivery(
@@ -18,7 +18,7 @@ class Delivery(
     val deliveryOrder: Int,
     status: DeliveryState
 ) {
-    lateinit var deliveryPlanId: DeliveryPlanId
+    lateinit var deliveryPlan: DeliveryPlan
         private set
 
     val id: DeliveryId
@@ -47,8 +47,9 @@ class Delivery(
         status = status.create()
     }
 
-    fun mapDeliveryPlanId(deliveryPlanId: DeliveryPlanId) {
-        this.deliveryPlanId = deliveryPlanId
+    fun mapDeliveryPlan(deliveryPlan: DeliveryPlan) {
+        deliveryPlan.mapDelivery(this)
+        this.deliveryPlan = deliveryPlan
     }
 
     companion object {

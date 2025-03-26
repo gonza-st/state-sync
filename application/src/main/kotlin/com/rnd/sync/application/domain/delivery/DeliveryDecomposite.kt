@@ -6,10 +6,10 @@ import com.rnd.sync.application.domain.delivery.state.DeliveryCreatedState
 import com.rnd.sync.application.domain.delivery.state.DeliveryDelayedState
 import com.rnd.sync.application.domain.delivery.state.DeliveryStartedState
 import com.rnd.sync.application.domain.delivery.state.DeliveryState
-import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
+import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan.DeliveryPlanId
 import com.rnd.sync.application.domain.order.Order.OrderId
 
-class DeliveryComposite(
+class DeliveryDecomposite(
     private val deliveryId: DeliveryId? = null,
     val orderId: OrderId,
     val orderNumber: String,
@@ -18,7 +18,7 @@ class DeliveryComposite(
     val deliveryOrder: Int,
     status: DeliveryState
 ) {
-    lateinit var deliveryPlan: DeliveryPlan
+    lateinit var deliveryPlanId: DeliveryPlanId
         private set
 
     val id: DeliveryId
@@ -47,9 +47,8 @@ class DeliveryComposite(
         status = status.create()
     }
 
-    fun mapDeliveryPlan(deliveryPlan: DeliveryPlan) {
-        deliveryPlan.mapDelivery(this)
-        this.deliveryPlan = deliveryPlan
+    fun mapDeliveryPlanId(deliveryPlanId: DeliveryPlanId) {
+        this.deliveryPlanId = deliveryPlanId
     }
 
     companion object {
@@ -59,8 +58,8 @@ class DeliveryComposite(
             destination: String,
             driverName: String,
             deliveryOrder: Int,
-        ): DeliveryComposite {
-            return DeliveryComposite(
+        ): DeliveryDecomposite {
+            return DeliveryDecomposite(
                 orderId = OrderId(orderId),
                 orderNumber = orderNumber,
                 destination = destination,
@@ -78,7 +77,7 @@ class DeliveryComposite(
             driverName: String,
             deliveryOrder: Int,
             status: String
-        ): DeliveryComposite {
+        ): DeliveryDecomposite {
             val allStatus = listOf(
                 DeliveryCreatedState(),
                 DeliveryStartedState(),
@@ -90,7 +89,7 @@ class DeliveryComposite(
             val selectedStatus = allStatus.find { it.name().equals(status, true) }
                 ?: throw IllegalArgumentException("Delivery status $status not found")
 
-            return DeliveryComposite(
+            return DeliveryDecomposite(
                 deliveryId = DeliveryId(id),
                 orderId = OrderId(orderId),
                 orderNumber = orderNumber,

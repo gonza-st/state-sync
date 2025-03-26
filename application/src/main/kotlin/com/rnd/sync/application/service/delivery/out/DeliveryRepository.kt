@@ -1,11 +1,11 @@
 package com.rnd.sync.application.service.delivery.out
 
+import com.rnd.sync.application.domain.delivery.DeliveryDecomposite
 import com.rnd.sync.application.domain.delivery.Delivery
-import com.rnd.sync.application.domain.delivery.DeliveryComposite
-import com.rnd.sync.application.domain.delivery.DeliveryComposite.DeliveryId
+import com.rnd.sync.application.domain.delivery.Delivery.DeliveryId
 
 interface DeliveryRepository {
-    fun save(deliveryComposite: DeliveryComposite): DeliveryId
+    fun save(delivery: Delivery): DeliveryId
 
-    fun get(deliveryId: DeliveryId): Delivery
+    fun get(deliveryId: DeliveryId): DeliveryDecomposite
 }
