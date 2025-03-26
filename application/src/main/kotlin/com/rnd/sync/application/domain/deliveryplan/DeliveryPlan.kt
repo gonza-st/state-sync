@@ -1,6 +1,6 @@
 package com.rnd.sync.application.domain.deliveryplan
 
-import com.rnd.sync.application.domain.delivery.Delivery
+import com.rnd.sync.application.domain.delivery.DeliveryComposite
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCancelledState
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCreatedState
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanState
@@ -17,12 +17,12 @@ class DeliveryPlan(
     var status = status
         private set
 
-    private val mutableDeliveries = mutableListOf<Delivery>()
-    val deliveries: List<Delivery>
+    private val mutableDeliveries = mutableListOf<DeliveryComposite>()
+    val deliveries: List<DeliveryComposite>
         get() = mutableDeliveries.toList()
 
-    fun mapDelivery(delivery: Delivery) {
-        this.mutableDeliveries.add(delivery)
+    fun mapDelivery(deliveryComposite: DeliveryComposite) {
+        this.mutableDeliveries.add(deliveryComposite)
     }
 
     companion object {

@@ -1,6 +1,6 @@
 package com.rnd.sync.application.service.deliveryplan
 
-import com.rnd.sync.application.domain.delivery.Delivery
+import com.rnd.sync.application.domain.delivery.DeliveryComposite
 import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
 import com.rnd.sync.application.domain.order.Order
 import com.rnd.sync.application.domain.order.Order.OrderId
@@ -45,10 +45,10 @@ class DeliveryPlanService(
         return orders
     }
 
-    private fun createDeliveries(orders: List<Order>, deliveryPlan: DeliveryPlan): List<Delivery> {
+    private fun createDeliveries(orders: List<Order>, deliveryPlan: DeliveryPlan): List<DeliveryComposite> {
         val deliveries = orders
             .mapIndexed { index, order ->
-                Delivery.createNewDelivery(
+                DeliveryComposite.createNew(
                     orderId = order.id.id,
                     orderNumber = order.orderNumber,
                     destination = order.receiver.address,
@@ -57,7 +57,7 @@ class DeliveryPlanService(
                 )
             }.onEach { it.mapDeliveryPlan(deliveryPlan) }
 
-        val savedDeliveries = deliveries.map { deliveryRepository.save(it) }
-        return savedDeliveries
+        deliveries.map { deliveryRepository.save(it) }
+        return deliveries
     }
 }

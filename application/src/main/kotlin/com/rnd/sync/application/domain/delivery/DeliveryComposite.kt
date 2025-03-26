@@ -6,10 +6,10 @@ import com.rnd.sync.application.domain.delivery.state.DeliveryCreatedState
 import com.rnd.sync.application.domain.delivery.state.DeliveryDelayedState
 import com.rnd.sync.application.domain.delivery.state.DeliveryStartedState
 import com.rnd.sync.application.domain.delivery.state.DeliveryState
-import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan.DeliveryPlanId
+import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
 import com.rnd.sync.application.domain.order.Order.OrderId
 
-class Delivery(
+class DeliveryComposite(
     private val deliveryId: DeliveryId? = null,
     val orderId: OrderId,
     val orderNumber: String,
@@ -18,7 +18,7 @@ class Delivery(
     val deliveryOrder: Int,
     status: DeliveryState
 ) {
-    lateinit var deliveryPlanId: DeliveryPlanId
+    lateinit var deliveryPlan: DeliveryPlan
         private set
 
     val id: DeliveryId
@@ -47,8 +47,9 @@ class Delivery(
         status = status.create()
     }
 
-    fun mapDeliveryPlanId(deliveryPlanId: DeliveryPlanId) {
-        this.deliveryPlanId = deliveryPlanId
+    fun mapDeliveryPlan(deliveryPlan: DeliveryPlan) {
+        deliveryPlan.mapDelivery(this)
+        this.deliveryPlan = deliveryPlan
     }
 
     companion object {
@@ -58,8 +59,8 @@ class Delivery(
             destination: String,
             driverName: String,
             deliveryOrder: Int,
-        ): Delivery {
-            return Delivery(
+        ): DeliveryComposite {
+            return DeliveryComposite(
                 orderId = OrderId(orderId),
                 orderNumber = orderNumber,
                 destination = destination,
@@ -77,7 +78,7 @@ class Delivery(
             driverName: String,
             deliveryOrder: Int,
             status: String
-        ): Delivery {
+        ): DeliveryComposite {
             val allStatus = listOf(
                 DeliveryCreatedState(),
                 DeliveryStartedState(),
@@ -89,7 +90,7 @@ class Delivery(
             val selectedStatus = allStatus.find { it.name().equals(status, true) }
                 ?: throw IllegalArgumentException("Delivery status $status not found")
 
-            return Delivery(
+            return DeliveryComposite(
                 deliveryId = DeliveryId(id),
                 orderId = OrderId(orderId),
                 orderNumber = orderNumber,
