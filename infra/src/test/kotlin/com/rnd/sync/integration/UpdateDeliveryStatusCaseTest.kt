@@ -4,8 +4,8 @@ import com.rnd.sync.application.domain.delivery.Delivery
 import com.rnd.sync.application.domain.delivery.Delivery.DeliveryId
 import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
 import com.rnd.sync.application.domain.order.Order
-import com.rnd.sync.application.service.delivery.`in`.UpdateDeliveryStatusCase
-import com.rnd.sync.application.service.delivery.`in`.UpdateDeliveryStatusCase.DeliveryStateUpdateRequest
+import com.rnd.sync.application.service.deliveryplan.`in`.UpdateDeliveryStatusCase
+import com.rnd.sync.application.service.deliveryplan.`in`.UpdateDeliveryStatusCase.DeliveryStateUpdateRequest
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanCommandRepository
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanQueryRepository
 import com.rnd.sync.application.service.order.out.OrderRepository

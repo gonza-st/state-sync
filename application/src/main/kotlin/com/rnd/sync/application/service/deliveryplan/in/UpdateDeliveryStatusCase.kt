@@ -1,4 +1,4 @@
-package com.rnd.sync.application.service.delivery.`in`
+package com.rnd.sync.application.service.deliveryplan.`in`
 
 interface UpdateDeliveryStatusCase {
     fun updateState(request: DeliveryStateUpdateRequest)
