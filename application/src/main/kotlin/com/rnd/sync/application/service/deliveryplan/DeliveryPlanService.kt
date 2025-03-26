@@ -31,7 +31,7 @@ class DeliveryPlanService(
     }
 
     private fun createDeliveryPlan(workingDate: LocalDate): DeliveryPlan {
-        val deliveryPlan = DeliveryPlan.createNewDeliveryPlan(
+        val deliveryPlan = DeliveryPlan.createNew(
             workingDate = workingDate
         )
         val savedDeliveryPlan = deliveryPlanRepository.save(deliveryPlan)

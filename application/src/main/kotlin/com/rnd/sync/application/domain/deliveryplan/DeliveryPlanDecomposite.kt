@@ -1,12 +1,11 @@
 package com.rnd.sync.application.domain.deliveryplan
 
-import com.rnd.sync.application.domain.delivery.DeliveryComposite
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCancelledState
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCreatedState
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanState
 import java.time.LocalDate
 
-class DeliveryPlan(
+class DeliveryPlanDecomposite(
     private val deliveryPlanId: DeliveryPlanId? = null,
     val workingDate: LocalDate,
     status: DeliveryPlanState
@@ -17,19 +16,11 @@ class DeliveryPlan(
     var status = status
         private set
 
-    private val mutableDeliveries = mutableListOf<DeliveryComposite>()
-    val deliveries: List<DeliveryComposite>
-        get() = mutableDeliveries.toList()
-
-    fun mapDelivery(deliveryComposite: DeliveryComposite) {
-        this.mutableDeliveries.add(deliveryComposite)
-    }
-
     companion object {
         fun createNew(
             workingDate: LocalDate,
-        ): DeliveryPlan {
-            return DeliveryPlan(
+        ): DeliveryPlanDecomposite {
+            return DeliveryPlanDecomposite(
                 workingDate = workingDate,
                 status = DeliveryPlanCreatedState()
             )
@@ -39,12 +30,12 @@ class DeliveryPlan(
             id: Long,
             workingDate: LocalDate,
             status: String
-        ): DeliveryPlan {
+        ): DeliveryPlanDecomposite {
             val allStatus = listOf(DeliveryPlanCreatedState(), DeliveryPlanCancelledState())
             val selectedStatus = allStatus.find { it.name().equals(status, true) }
                 ?: throw IllegalArgumentException("DeliveryPlan status $status not found")
 
-            return DeliveryPlan(
+            return DeliveryPlanDecomposite(
                 deliveryPlanId = DeliveryPlanId(id),
                 workingDate = workingDate,
                 status = selectedStatus
