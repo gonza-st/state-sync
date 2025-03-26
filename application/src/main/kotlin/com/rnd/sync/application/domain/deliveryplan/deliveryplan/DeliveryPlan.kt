@@ -19,6 +19,7 @@ class DeliveryPlan(
     var status = status
         private set
 
+    // TODO ("일급 컬렉션 만들기")
     private val mutableDeliveries = mutableListOf<Delivery>()
     val deliveries: List<Delivery>
         get() = mutableDeliveries.toList()
