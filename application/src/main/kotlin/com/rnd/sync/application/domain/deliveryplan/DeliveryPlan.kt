@@ -1,6 +1,7 @@
 package com.rnd.sync.application.domain.deliveryplan
 
 import com.rnd.sync.application.domain.delivery.Delivery
+import com.rnd.sync.application.domain.delivery.Delivery.DeliveryId
 import com.rnd.sync.application.domain.delivery.state.DeliveryCancelledState
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCancelledState
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCreatedState
@@ -41,6 +42,31 @@ class DeliveryPlan(
             .filter { it.status is DeliveryCancelledState }
 
         return deliveries.size == result.size
+    }
+
+    fun startDelivery(id: DeliveryId) {
+        val delivery = findDelivery(id)
+        delivery.start()
+    }
+
+    fun cancelDelivery(id: DeliveryId) {
+        val delivery = findDelivery(id)
+        delivery.cancel()
+    }
+
+    fun delayDelivery(id: DeliveryId) {
+        val delivery = findDelivery(id)
+        delivery.delay()
+    }
+
+    fun completeDelivery(id: DeliveryId) {
+        val delivery = findDelivery(id)
+        delivery.complete()
+    }
+
+    private fun findDelivery(id: DeliveryId): Delivery {
+        val result = deliveries.find { it.id == id }
+        return result ?: throw IllegalArgumentException("해당 id 없음")
     }
 
     companion object {

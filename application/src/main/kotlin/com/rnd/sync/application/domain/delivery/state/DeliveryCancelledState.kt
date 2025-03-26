@@ -22,6 +22,6 @@ class DeliveryCancelledState:  DeliveryState {
     }
 
     override fun cancel():  DeliveryState {
-        throw IllegalStateException("취소 상태에서는 상태를 바꿀 수 없다")
+        throw IllegalStateException("이미 취소된 상태입니다")
     }
 }

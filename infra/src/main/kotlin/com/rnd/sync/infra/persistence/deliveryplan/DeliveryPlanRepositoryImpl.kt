@@ -1,6 +1,7 @@
 package com.rnd.sync.infra.persistence.deliveryplan
 
 import com.rnd.sync.application.domain.delivery.Delivery
+import com.rnd.sync.application.domain.delivery.Delivery.DeliveryId
 import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
 import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan.DeliveryPlanId
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanRepository
@@ -51,6 +52,17 @@ class DeliveryPlanRepositoryImpl(
         val deliveryPlanEntity = getDeliveryPlanEntityById(deliveryPlanId)
         val deliveryEntities = getAllDeliveriesByDeliveryId(deliveryPlanId)
 
+        val deliveryPlan = mapToDeliveryPlan(deliveryPlanEntity, deliveryEntities)
+        return deliveryPlan
+    }
+
+    override fun getByDeliveryId(deliveryId: DeliveryId): DeliveryPlan {
+        val deliveryEntity = deliveryJpaRepository.findById(deliveryId.id)
+            .orElseThrow { EntityNotFoundException("Delivery with id $deliveryId not found") }
+
+        val deliveryPlanId = DeliveryPlanId(deliveryEntity.deliveryPlanId)
+        val deliveryPlanEntity = getDeliveryPlanEntityById(deliveryPlanId)
+        val deliveryEntities = getAllDeliveriesByDeliveryId(deliveryPlanId)
         val deliveryPlan = mapToDeliveryPlan(deliveryPlanEntity, deliveryEntities)
         return deliveryPlan
     }

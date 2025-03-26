@@ -1,9 +1,7 @@
 package com.rnd.sync.application.service.delivery.`in`
 
-import com.rnd.sync.application.domain.delivery.Delivery
-
 interface UpdateDeliveryStatusCase {
-    fun updateState(request: DeliveryStateUpdateRequest): Delivery
+    fun updateState(request: DeliveryStateUpdateRequest)
 
     data class DeliveryStateUpdateRequest(
         val deliveryId: Long,

@@ -27,13 +27,13 @@ class OrderService(
 
     override fun updateState(request: StateUpdateRequest): Order {
         val foundOrder = repository.get(Order.OrderId(request.orderId))
-        updateStatus(status = request.status, order = foundOrder)
+        changeStatus(status = request.status, order = foundOrder)
 
         val updatedOrder = repository.update(foundOrder)
         return updatedOrder
     }
 
-    private fun updateStatus(status: String, order: Order) {
+    private fun changeStatus(status: String, order: Order) {
         if (status == OrderCreatedState().name()) {
             order.create()
         } else {
