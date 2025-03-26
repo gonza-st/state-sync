@@ -1,0 +1,25 @@
+package com.rnd.sync.infra.persistence.deliveryplan.entity
+
+import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
+import org.springframework.data.jpa.domain.AbstractPersistable_.id
+import org.springframework.stereotype.Component
+
+@Component
+class DeliveryPlanEntityMapper {
+    fun fromDeliveryPlanToNewDeliveryPlanEntity(deliveryPlan: DeliveryPlan): DeliveryPlanEntity {
+        return DeliveryPlanEntity(
+            workingDate = deliveryPlan.workingDate,
+            status = deliveryPlan.status.name(),
+        )
+    }
+
+    fun fromDeliveryPlanEntityToDeliveryPlanDomain(deliveryPlanEntity: DeliveryPlanEntity): DeliveryPlan {
+        val deliveryPlanId = deliveryPlanEntity.id ?: throw IllegalArgumentException("Order with id $id not found")
+
+        return DeliveryPlan.createDeliveryPlan(
+            id = deliveryPlanId,
+            workingDate = deliveryPlanEntity.workingDate,
+            status = deliveryPlanEntity.status
+        )
+    }
+}

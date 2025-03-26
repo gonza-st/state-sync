@@ -13,7 +13,7 @@ class OrderEntityMapper {
             receiverName = order.receiver.name,
             receiverContact = order.receiver.contact,
             receiverAddress = order.receiver.address,
-            status = order.orderStatus.name()
+            status = order.status.name()
         )
     }
 
@@ -25,7 +25,7 @@ class OrderEntityMapper {
             receiverName = order.receiver.name,
             receiverContact = order.receiver.contact,
             receiverAddress = order.receiver.address,
-            status = order.orderStatus.name()
+            status = order.status.name()
         )
     }
 

@@ -51,7 +51,7 @@ class UpdateOrderStatusCase {
         val updatedOrder = updateOrderStatusCase.updateState(request)
 
         assertEquals(savedOrder.id.id, updatedOrder.id.id)
-        assertEquals(OrderCancelledState().name(), updatedOrder.orderStatus.name())
+        assertEquals(OrderCancelledState().name(), updatedOrder.status.name())
     }
 
     @Test
@@ -62,7 +62,7 @@ class UpdateOrderStatusCase {
         )
 
         val cancelledOrder = updateOrderStatusCase.updateState(cancelRequest)
-        assertEquals(OrderCancelledState().name(), cancelledOrder.orderStatus.name())
+        assertEquals(OrderCancelledState().name(), cancelledOrder.status.name())
 
         val createRequest = StateUpdateRequest(
             orderId = savedOrder.id.id,

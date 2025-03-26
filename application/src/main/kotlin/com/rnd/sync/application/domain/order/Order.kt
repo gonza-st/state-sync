@@ -15,15 +15,15 @@ class Order(
     val id: OrderId
         get() = orderId ?: throw IllegalStateException("id should not be null")
 
-    var orderStatus = status
+    var status = status
         private set
 
     fun create() {
-        orderStatus = orderStatus.create()
+        status = status.create()
     }
 
     fun cancel() {
-        orderStatus = orderStatus.cancel()
+        status = status.cancel()
     }
 
     companion object {
