@@ -31,6 +31,19 @@ class DeliveryEntityMapper {
         )
     }
 
+    fun fromDeliveryToDeliveryEntity(delivery: Delivery, deliveryPlanId: Long): DeliveryEntity {
+        return DeliveryEntity(
+            id = delivery.id.id,
+            orderId = delivery.orderId.id,
+            orderNumber = delivery.orderNumber,
+            destination = delivery.destination,
+            driverName = delivery.driverName,
+            deliveryOrder = delivery.deliveryOrder,
+            status = delivery.status.name(),
+            deliveryPlanId = deliveryPlanId
+        )
+    }
+
     fun fromDeliveryEntityToDeliveryDecomposite(deliveryEntity: DeliveryEntity): DeliveryDecomposite {
         val deliveryId = deliveryEntity.id ?: throw IllegalArgumentException("Delivery with id ${deliveryEntity.id} not found")
 

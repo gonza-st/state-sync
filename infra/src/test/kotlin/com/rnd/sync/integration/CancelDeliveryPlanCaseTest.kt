@@ -1,11 +1,10 @@
 package com.rnd.sync.integration
 
-import com.rnd.sync.application.domain.delivery.DeliveryComposite
+import com.rnd.sync.application.domain.delivery.Delivery
 import com.rnd.sync.application.domain.delivery.state.DeliveryCancelledState
 import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCancelledState
 import com.rnd.sync.application.domain.order.Order
-import com.rnd.sync.application.service.delivery.out.DeliveryRepository
 import com.rnd.sync.application.service.deliveryplan.`in`.CancelDeliveryPlanCase
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanRepository
 import com.rnd.sync.application.service.order.out.OrderRepository
@@ -32,9 +31,6 @@ class CancelDeliveryPlanCaseTest {
     private lateinit var orderRepository: OrderRepository
 
     @Autowired
-    private lateinit var deliveryRepository: DeliveryRepository
-
-    @Autowired
     private lateinit var deliveryPlanRepository: DeliveryPlanRepository
 
     @Autowired
@@ -42,14 +38,15 @@ class CancelDeliveryPlanCaseTest {
 
     private lateinit var savedDeliveryPlan: DeliveryPlan
 
-    @Test
-    fun contextLoads() {
-    }
-
     @BeforeEach
     fun setup() {
         savedDeliveryPlan = createDeliveryPlan()
     }
+
+    @Test
+    fun contextLoads() {
+    }
+
 
     @Test
     fun `배송 계획이 취소 상태가 되어야한다`() {
@@ -71,14 +68,12 @@ class CancelDeliveryPlanCaseTest {
     private fun createDeliveryPlan(): DeliveryPlan {
         val orders = (1..5).map { createOrder(it) }
         val savedOrders = orders.map { orderRepository.save(it) }
+
         val deliveryPlan = DeliveryPlan.createNew(LocalDate.of(2025, 1, 1))
+        val deliveries = savedOrders.mapIndexed { index, order -> createDelivery(index, order) }
+        deliveries.forEach { it.mapDeliveryPlan(deliveryPlan) }
+
         val savedDeliveryPlan = deliveryPlanRepository.save(deliveryPlan)
-
-        val deliveryComposites = savedOrders
-            .mapIndexed { index, order -> createDelivery(index, order) }
-            .onEach { it.mapDeliveryPlan(savedDeliveryPlan) }
-
-        deliveryComposites.map { deliveryRepository.save(it) }
         return savedDeliveryPlan
     }
 
@@ -93,8 +88,8 @@ class CancelDeliveryPlanCaseTest {
         return orderRepository.save(order)
     }
 
-    private fun createDelivery(index: Int, order: Order): DeliveryComposite {
-        return DeliveryComposite.createNew(
+    private fun createDelivery(index: Int, order: Order): Delivery {
+        return Delivery.createNew(
             orderId = order.id.id,
             orderNumber = order.orderNumber,
             destination = order.receiver.address,

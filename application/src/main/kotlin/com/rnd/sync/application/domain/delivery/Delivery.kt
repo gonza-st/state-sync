@@ -37,6 +37,7 @@ class Delivery(
 
     fun cancel() {
         status = status.cancel()
+        deliveryPlan.syncStatus()
     }
 
     fun complete() {
