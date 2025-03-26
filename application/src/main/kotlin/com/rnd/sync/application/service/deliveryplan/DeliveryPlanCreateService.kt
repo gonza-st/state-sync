@@ -9,24 +9,35 @@ import com.rnd.sync.application.service.deliveryplan.`in`.CreateDeliveryPlanCase
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanRepository
 import com.rnd.sync.application.service.order.out.OrderRepository
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 
 @Service
 class DeliveryPlanCreateService(
     private val orderRepository: OrderRepository,
     private val deliveryPlanRepository: DeliveryPlanRepository
 ) : CreateDeliveryPlanCase {
+
     override fun create(request: DeliveryPlanRequest): DeliveryPlan {
         val orders = getOrders(rawOrderIds = request.orderNumbers)
 
-        val deliveries = orders.mapIndexed { index, order -> createDelivery(index, order) }
-        val deliveryPlan = DeliveryPlan.createNew(workingDate = request.deliveryDate)
-        deliveries.forEach { it.mapDeliveryPlan(deliveryPlan) }
+        val deliveryPlan = generateDeliveryPlan(
+            workingDate = request.deliveryDate,
+            orders = orders
+        )
 
         val savedDeliveryPlan = deliveryPlanRepository.save(deliveryPlan)
         return savedDeliveryPlan
     }
 
-    private fun createDelivery(index: Int, order: Order): Delivery {
+    private fun generateDeliveryPlan(workingDate: LocalDate, orders: List<Order>): DeliveryPlan {
+        val deliveries = orders.mapIndexed { index, order -> generateDelivery(index, order) }
+        val deliveryPlan = DeliveryPlan.createNew(workingDate)
+        deliveries.forEach { it.mapDeliveryPlan(deliveryPlan) }
+
+        return deliveryPlan
+    }
+
+    private fun generateDelivery(index: Int, order: Order): Delivery {
         return Delivery.createNew(
             orderId = order.id.id,
             orderNumber = order.orderNumber,
