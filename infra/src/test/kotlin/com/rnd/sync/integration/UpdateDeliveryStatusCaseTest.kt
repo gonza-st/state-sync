@@ -9,16 +9,20 @@ import com.rnd.sync.application.domain.order.state.OrderCancelledState
 import com.rnd.sync.application.service.deliveryplan.`in`.UpdateDeliveryStatusCase
 import com.rnd.sync.application.service.deliveryplan.`in`.UpdateDeliveryStatusCase.DeliveryStateUpdateRequest
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanCommandRepository
+import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanEventPublisher
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanQueryRepository
 import com.rnd.sync.application.service.order.out.OrderRepository
+import com.rnd.sync.application.utils.event.DeliveryCancelEvent
 import com.rnd.sync.infra.web.SyncApplication
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.mockito.Mockito.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.test.annotation.DirtiesContext
@@ -41,6 +45,9 @@ class UpdateDeliveryStatusCaseTest {
 
     @Autowired
     private lateinit var deliveryPlanCommandRepository: DeliveryPlanCommandRepository
+
+    @SpyBean
+    private lateinit var deliveryPlanEventPublisher: DeliveryPlanEventPublisher
 
     @Autowired
     private lateinit var updateDeliveryStatusCase: UpdateDeliveryStatusCase
@@ -77,7 +84,7 @@ class UpdateDeliveryStatusCaseTest {
     }
 
     @Test
-    fun `배송이 취소되면 해당 주문도 취소된다`() {
+    fun `배송이 취소되면 배송 취소 이벤트가 발생한다`() {
         val rawDeliveryId = 1L
         val request = DeliveryStateUpdateRequest(
             deliveryId = rawDeliveryId,
@@ -86,9 +93,8 @@ class UpdateDeliveryStatusCaseTest {
 
         updateDeliveryStatusCase.updateState(request)
 
-        val orderId = OrderId(rawDeliveryId)
-        val order = orderRepository.get(orderId)
-        assertEquals(OrderCancelledState().name(), order.status.name())
+        val event = DeliveryCancelEvent(deliveryId = rawDeliveryId, orderId = 6L)
+        verify(deliveryPlanEventPublisher).deliveryCancelled(event)
     }
 
     private fun createDeliveryPlan(): DeliveryPlan {

@@ -2,6 +2,7 @@ package com.rnd.sync.application.service.order
 
 import com.rnd.sync.application.domain.order.Order
 import com.rnd.sync.application.domain.order.state.OrderCreatedState
+import com.rnd.sync.application.service.order.`in`.CancelOrderCase
 import com.rnd.sync.application.service.order.`in`.CreateOrderCase
 import com.rnd.sync.application.service.order.`in`.CreateOrderCase.OrderRequest
 import com.rnd.sync.application.service.order.`in`.UpdateOrderStatusCase
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service
 @Service
 class OrderService(
     private val repository: OrderRepository
-) : CreateOrderCase, UpdateOrderStatusCase {
+) : CreateOrderCase, UpdateOrderStatusCase, CancelOrderCase {
     override fun createOrder(request: OrderRequest): Order {
         val order = Order.createNew(
             productName = request.orderedItem,
@@ -31,6 +32,14 @@ class OrderService(
 
         val updatedOrder = repository.update(foundOrder)
         return updatedOrder
+    }
+
+    override fun cancelOrder(request: CancelOrderCase.CancelOrderRequest) {
+        val orderId = Order.OrderId(request.orderId)
+        val foundOrder = repository.get(orderId)
+        changeStatus(status = "cancelled", order = foundOrder)
+
+        repository.update(foundOrder)
     }
 
     private fun changeStatus(status: String, order: Order) {

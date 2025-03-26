@@ -65,6 +65,11 @@ class DeliveryPlan(
         delivery.complete()
     }
 
+    // fixme
+    fun getDelivery(id: DeliveryId): Delivery {
+        return findDelivery(id)
+    }
+
     private fun findDelivery(id: DeliveryId): Delivery {
         val result = deliveries.find { it.id == id }
         return result ?: throw IllegalArgumentException("해당 id 없음")
