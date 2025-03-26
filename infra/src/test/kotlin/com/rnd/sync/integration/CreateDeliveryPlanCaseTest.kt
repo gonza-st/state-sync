@@ -22,7 +22,7 @@ import kotlin.test.assertEquals
 @EntityScan(basePackages = ["com.rnd.sync"])
 @EnableJpaRepositories(basePackages = ["com.rnd.sync"])
 @ComponentScan(basePackages = ["com.rnd.sync"])
-class CreateDeliveryDecompositePlanCaseTest {
+class CreateDeliveryPlanCaseTest {
 
     @Autowired
     private lateinit var orderRepository: OrderRepository

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class DeliveryEntityMapper {
-    fun fromDeliveryToNewDeliveryEntity(deliveryDecomposite: DeliveryDecomposite): DeliveryEntity {
+    fun fromDeliveryDecompositeToNewDeliveryEntity(deliveryDecomposite: DeliveryDecomposite): DeliveryEntity {
         return DeliveryEntity(
             orderId = deliveryDecomposite.orderId.id,
             orderNumber = deliveryDecomposite.orderNumber,
@@ -19,7 +19,7 @@ class DeliveryEntityMapper {
         )
     }
 
-    fun fromDeliveryCompositeToNewDeliveryEntity(delivery: Delivery): DeliveryEntity {
+    fun fromDeliveryToNewDeliveryEntity(delivery: Delivery, deliveryPlanId: Long): DeliveryEntity {
         return DeliveryEntity(
             orderId = delivery.orderId.id,
             orderNumber = delivery.orderNumber,
@@ -27,11 +27,11 @@ class DeliveryEntityMapper {
             driverName = delivery.driverName,
             deliveryOrder = delivery.deliveryOrder,
             status = delivery.status.name(),
-            deliveryPlanId = delivery.deliveryPlan.id.id
+            deliveryPlanId = deliveryPlanId
         )
     }
 
-    fun fromDeliveryEntityToDeliveryDomain(deliveryEntity: DeliveryEntity): DeliveryDecomposite {
+    fun fromDeliveryEntityToDeliveryDecomposite(deliveryEntity: DeliveryEntity): DeliveryDecomposite {
         val deliveryId = deliveryEntity.id ?: throw IllegalArgumentException("Delivery with id ${deliveryEntity.id} not found")
 
         val deliveryDecomposite = DeliveryDecomposite.create(
@@ -48,7 +48,7 @@ class DeliveryEntityMapper {
         return deliveryDecomposite
     }
 
-    fun fromDeliveryEntityToDeliveryComposite(deliveryEntity: DeliveryEntity): Delivery {
+    fun fromDeliveryEntityToDelivery(deliveryEntity: DeliveryEntity): Delivery {
         val deliveryId = deliveryEntity.id ?: throw IllegalArgumentException("Delivery with id ${deliveryEntity.id} not found")
 
         val delivery = Delivery.create(

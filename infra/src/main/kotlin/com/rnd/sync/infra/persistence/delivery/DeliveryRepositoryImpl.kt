@@ -14,20 +14,11 @@ class DeliveryRepositoryImpl(
     private val deliveryEntityMapper: DeliveryEntityMapper,
     private val deliveryJpaRepository: DeliveryJpaRepository
 ): DeliveryRepository {
-    override fun save(delivery: Delivery): DeliveryId {
-        val entity = deliveryEntityMapper.fromDeliveryCompositeToNewDeliveryEntity(delivery)
-        val savedEntity = deliveryJpaRepository.save(entity)
-        val entityId = savedEntity.id ?: throw EntityNotFoundException()
-
-        val deliveryId = DeliveryId(entityId)
-        return deliveryId
-    }
-
     override fun get(deliveryId: DeliveryId): DeliveryDecomposite {
         val foundEntity = deliveryJpaRepository.findById(deliveryId.id)
             .orElseThrow { EntityNotFoundException("Delivery with id $deliveryId not found") }
 
-        val foundDelivery = deliveryEntityMapper.fromDeliveryEntityToDeliveryDomain(foundEntity)
+        val foundDelivery = deliveryEntityMapper.fromDeliveryEntityToDeliveryDecomposite(foundEntity)
         return foundDelivery
     }
 }
