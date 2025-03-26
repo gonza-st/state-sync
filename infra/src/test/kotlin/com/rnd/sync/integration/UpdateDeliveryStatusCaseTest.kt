@@ -4,25 +4,19 @@ import com.rnd.sync.application.domain.deliveryplan.delivery.Delivery
 import com.rnd.sync.application.domain.deliveryplan.delivery.Delivery.DeliveryId
 import com.rnd.sync.application.domain.deliveryplan.deliveryplan.DeliveryPlan
 import com.rnd.sync.application.domain.order.Order
-import com.rnd.sync.application.domain.order.Order.OrderId
-import com.rnd.sync.application.domain.order.state.OrderCancelledState
 import com.rnd.sync.application.service.deliveryplan.`in`.UpdateDeliveryStatusCase
 import com.rnd.sync.application.service.deliveryplan.`in`.UpdateDeliveryStatusCase.DeliveryStateUpdateRequest
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanCommandRepository
-import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanEventPublisher
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanQueryRepository
 import com.rnd.sync.application.service.order.out.OrderRepository
-import com.rnd.sync.application.utils.event.DeliveryCancelEvent
 import com.rnd.sync.infra.web.SyncApplication
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.SpyBean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 import org.springframework.test.annotation.DirtiesContext
@@ -45,9 +39,6 @@ class UpdateDeliveryStatusCaseTest {
 
     @Autowired
     private lateinit var deliveryPlanCommandRepository: DeliveryPlanCommandRepository
-
-    @SpyBean
-    private lateinit var deliveryPlanEventPublisher: DeliveryPlanEventPublisher
 
     @Autowired
     private lateinit var updateDeliveryStatusCase: UpdateDeliveryStatusCase
@@ -92,9 +83,6 @@ class UpdateDeliveryStatusCaseTest {
         )
 
         updateDeliveryStatusCase.updateState(request)
-
-        val event = DeliveryCancelEvent(deliveryId = rawDeliveryId, orderId = 6L)
-        verify(deliveryPlanEventPublisher).deliveryCancelled(event)
     }
 
     private fun createDeliveryPlan(): DeliveryPlan {

@@ -4,3 +4,4 @@ plugins {
 rootProject.name = "sync"
 include("infra")
 include("application")
+include("common")

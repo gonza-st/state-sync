@@ -7,6 +7,13 @@ import com.rnd.sync.application.service.order.`in`.UpdateOrderStatusCase
 import com.rnd.sync.application.service.order.`in`.UpdateOrderStatusCase.StateUpdateRequest
 import com.rnd.sync.application.service.order.out.OrderRepository
 import com.rnd.sync.infra.web.SyncApplication
+
+
+import io.mockk.verify
+import com.ninjasquad.springmockk.SpykBean
+import com.rnd.sync.application.service.order.out.OrderEventPublisher
+import com.rnd.sync.common.event.delivery.OrderCancelledEvent
+
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -25,9 +32,12 @@ import org.springframework.test.annotation.DirtiesContext
 @EnableJpaRepositories(basePackages = ["com.rnd.sync"])
 @ComponentScan(basePackages = ["com.rnd.sync"])
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-class UpdateOrderStatusCase {
+class UpdateOrderStatusCaseTest {
     @Autowired
     private lateinit var orderRepository: OrderRepository
+
+    @SpykBean
+    private lateinit var orderEventPublisher: OrderEventPublisher
 
     @Autowired
     private lateinit var updateOrderStatusCase: UpdateOrderStatusCase
@@ -54,6 +64,9 @@ class UpdateOrderStatusCase {
 
         assertEquals(savedOrder.id.id, updatedOrder.id.id)
         assertEquals(OrderCancelledState().name(), updatedOrder.status.name())
+
+        val payload = OrderCancelledEvent.Payload(orderId = savedOrder.id.id)
+        verify { orderEventPublisher.publishOrderCancelledEvent(OrderCancelledEvent(payload)) }
     }
 
     @Test
