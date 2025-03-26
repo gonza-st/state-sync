@@ -1,4 +1,4 @@
-package com.rnd.sync.infra.persistence.delivery.entity
+package com.rnd.sync.infra.persistence.deliveryplan.delivery.entity
 
 import com.rnd.sync.application.domain.deliveryplan.delivery.Delivery
 import org.springframework.stereotype.Component

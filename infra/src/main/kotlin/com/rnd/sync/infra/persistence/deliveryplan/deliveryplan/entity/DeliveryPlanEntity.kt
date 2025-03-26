@@ -1,4 +1,4 @@
-package com.rnd.sync.infra.persistence.deliveryplan.entity
+package com.rnd.sync.infra.persistence.deliveryplan.deliveryplan.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

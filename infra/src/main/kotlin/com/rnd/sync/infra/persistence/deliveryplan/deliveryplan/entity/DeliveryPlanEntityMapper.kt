@@ -1,4 +1,4 @@
-package com.rnd.sync.infra.persistence.deliveryplan.entity
+package com.rnd.sync.infra.persistence.deliveryplan.deliveryplan.entity
 
 import com.rnd.sync.application.domain.deliveryplan.deliveryplan.DeliveryPlan
 import org.springframework.data.jpa.domain.AbstractPersistable_.id
