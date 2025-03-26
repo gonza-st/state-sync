@@ -14,14 +14,6 @@ class DeliveryRepositoryImpl(
     private val deliveryEntityMapper: DeliveryEntityMapper,
     private val deliveryJpaRepository: DeliveryJpaRepository
 ): DeliveryRepository {
-    override fun save(delivery: Delivery): Delivery {
-        val entity = deliveryEntityMapper.fromDeliveryToNewDeliveryEntity(delivery)
-        val savedEntity = deliveryJpaRepository.save(entity)
-
-        val savedDelivery = deliveryEntityMapper.fromDeliveryEntityToDeliveryDomain(savedEntity)
-        return savedDelivery
-    }
-
     override fun save(deliveryComposite: DeliveryComposite): DeliveryId {
         val entity = deliveryEntityMapper.fromDeliveryCompositeToNewDeliveryEntity(deliveryComposite)
         val savedEntity = deliveryJpaRepository.save(entity)
