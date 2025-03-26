@@ -3,6 +3,7 @@ package com.rnd.sync.integration
 import com.rnd.sync.application.domain.delivery.Delivery
 import com.rnd.sync.application.domain.delivery.state.DeliveryCancelledState
 import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
+import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan.DeliveryPlanId
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCancelledState
 import com.rnd.sync.application.domain.order.Order
 import com.rnd.sync.application.service.deliveryplan.`in`.CancelDeliveryPlanCase
@@ -53,6 +54,9 @@ class CancelDeliveryPlanCaseTest {
         val rawDeliveryPlanId = savedDeliveryPlan.id.id
         val cancelledDeliveryPlan = cancelDeliveryPlanCase.cancelPlan(rawDeliveryPlanId)
         assertEquals(DeliveryPlanCancelledState().name(), cancelledDeliveryPlan.status.name())
+
+        val foundDeliveryPlan = deliveryPlanRepository.get(DeliveryPlanId(rawDeliveryPlanId))
+        assertEquals(DeliveryPlanCancelledState().name(), foundDeliveryPlan.status.name())
     }
 
     @Test
@@ -60,7 +64,12 @@ class CancelDeliveryPlanCaseTest {
         val rawDeliveryPlanId = savedDeliveryPlan.id.id
         val cancelledDeliveryPlan = cancelDeliveryPlanCase.cancelPlan(rawDeliveryPlanId)
 
-        cancelledDeliveryPlan.deliveries.forEach { it ->
+        cancelledDeliveryPlan.deliveries.forEach {
+            assertEquals(DeliveryCancelledState().name(), it.status.name())
+        }
+
+        val foundDeliveryPlan = deliveryPlanRepository.get(DeliveryPlanId(rawDeliveryPlanId))
+        foundDeliveryPlan.deliveries.forEach {
             assertEquals(DeliveryCancelledState().name(), it.status.name())
         }
     }
