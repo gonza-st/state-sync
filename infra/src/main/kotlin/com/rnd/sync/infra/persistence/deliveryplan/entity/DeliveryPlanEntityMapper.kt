@@ -1,6 +1,6 @@
 package com.rnd.sync.infra.persistence.deliveryplan.entity
 
-import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
+import com.rnd.sync.application.domain.deliveryplan.deliveryplan.DeliveryPlan
 import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.stereotype.Component
 

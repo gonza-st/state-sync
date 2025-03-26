@@ -1,11 +1,11 @@
 package com.rnd.sync.application.service.deliveryplan
 
-import com.rnd.sync.application.domain.delivery.Delivery.DeliveryId
-import com.rnd.sync.application.domain.delivery.state.DeliveryCancelledState
-import com.rnd.sync.application.domain.delivery.state.DeliveryCompletedState
-import com.rnd.sync.application.domain.delivery.state.DeliveryDelayedState
-import com.rnd.sync.application.domain.delivery.state.DeliveryStartedState
-import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
+import com.rnd.sync.application.domain.deliveryplan.delivery.Delivery.DeliveryId
+import com.rnd.sync.application.domain.deliveryplan.delivery.state.DeliveryCancelledState
+import com.rnd.sync.application.domain.deliveryplan.delivery.state.DeliveryCompletedState
+import com.rnd.sync.application.domain.deliveryplan.delivery.state.DeliveryDelayedState
+import com.rnd.sync.application.domain.deliveryplan.delivery.state.DeliveryStartedState
+import com.rnd.sync.application.domain.deliveryplan.deliveryplan.DeliveryPlan
 import com.rnd.sync.application.service.deliveryplan.`in`.UpdateDeliveryStatusCase
 import com.rnd.sync.application.service.deliveryplan.`in`.UpdateDeliveryStatusCase.DeliveryStateUpdateRequest
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanCommandRepository

@@ -1,8 +1,8 @@
 package com.rnd.sync.integration
 
-import com.rnd.sync.application.domain.delivery.Delivery
-import com.rnd.sync.application.domain.delivery.Delivery.DeliveryId
-import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
+import com.rnd.sync.application.domain.deliveryplan.delivery.Delivery
+import com.rnd.sync.application.domain.deliveryplan.delivery.Delivery.DeliveryId
+import com.rnd.sync.application.domain.deliveryplan.deliveryplan.DeliveryPlan
 import com.rnd.sync.application.domain.order.Order
 import com.rnd.sync.application.service.deliveryplan.`in`.UpdateDeliveryStatusCase
 import com.rnd.sync.application.service.deliveryplan.`in`.UpdateDeliveryStatusCase.DeliveryStateUpdateRequest

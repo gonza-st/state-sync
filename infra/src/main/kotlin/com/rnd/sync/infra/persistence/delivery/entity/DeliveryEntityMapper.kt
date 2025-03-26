@@ -1,6 +1,6 @@
 package com.rnd.sync.infra.persistence.delivery.entity
 
-import com.rnd.sync.application.domain.delivery.Delivery
+import com.rnd.sync.application.domain.deliveryplan.delivery.Delivery
 import org.springframework.stereotype.Component
 
 @Component

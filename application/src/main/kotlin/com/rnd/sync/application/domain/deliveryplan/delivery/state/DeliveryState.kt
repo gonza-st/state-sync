@@ -1,4 +1,4 @@
-package com.rnd.sync.application.domain.delivery.state
+package com.rnd.sync.application.domain.deliveryplan.delivery.state
 
 interface DeliveryState {
     fun name(): String

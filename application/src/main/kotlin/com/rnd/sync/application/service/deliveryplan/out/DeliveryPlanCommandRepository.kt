@@ -1,6 +1,6 @@
 package com.rnd.sync.application.service.deliveryplan.out
 
-import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
+import com.rnd.sync.application.domain.deliveryplan.deliveryplan.DeliveryPlan
 
 interface DeliveryPlanCommandRepository {
     fun save(deliveryPlan: DeliveryPlan): DeliveryPlan

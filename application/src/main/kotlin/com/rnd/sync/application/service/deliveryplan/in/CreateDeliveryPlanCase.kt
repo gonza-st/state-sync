@@ -1,6 +1,6 @@
 package com.rnd.sync.application.service.deliveryplan.`in`
 
-import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
+import com.rnd.sync.application.domain.deliveryplan.deliveryplan.DeliveryPlan
 import java.time.LocalDate
 
 interface CreateDeliveryPlanCase {

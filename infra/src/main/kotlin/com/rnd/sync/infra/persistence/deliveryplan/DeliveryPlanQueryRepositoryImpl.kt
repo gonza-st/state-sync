@@ -1,8 +1,8 @@
 package com.rnd.sync.infra.persistence.deliveryplan
 
-import com.rnd.sync.application.domain.delivery.Delivery.DeliveryId
-import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
-import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan.DeliveryPlanId
+import com.rnd.sync.application.domain.deliveryplan.delivery.Delivery.DeliveryId
+import com.rnd.sync.application.domain.deliveryplan.deliveryplan.DeliveryPlan
+import com.rnd.sync.application.domain.deliveryplan.deliveryplan.DeliveryPlan.DeliveryPlanId
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanQueryRepository
 import com.rnd.sync.infra.persistence.delivery.entity.DeliveryEntity
 import com.rnd.sync.infra.persistence.delivery.entity.DeliveryEntityMapper

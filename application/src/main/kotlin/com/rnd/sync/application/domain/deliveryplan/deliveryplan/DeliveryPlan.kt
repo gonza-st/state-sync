@@ -1,11 +1,11 @@
-package com.rnd.sync.application.domain.deliveryplan
+package com.rnd.sync.application.domain.deliveryplan.deliveryplan
 
-import com.rnd.sync.application.domain.delivery.Delivery
-import com.rnd.sync.application.domain.delivery.Delivery.DeliveryId
-import com.rnd.sync.application.domain.delivery.state.DeliveryCancelledState
-import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCancelledState
-import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCreatedState
-import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanState
+import com.rnd.sync.application.domain.deliveryplan.delivery.Delivery
+import com.rnd.sync.application.domain.deliveryplan.delivery.Delivery.DeliveryId
+import com.rnd.sync.application.domain.deliveryplan.delivery.state.DeliveryCancelledState
+import com.rnd.sync.application.domain.deliveryplan.deliveryplan.state.DeliveryPlanCancelledState
+import com.rnd.sync.application.domain.deliveryplan.deliveryplan.state.DeliveryPlanCreatedState
+import com.rnd.sync.application.domain.deliveryplan.deliveryplan.state.DeliveryPlanState
 import java.time.LocalDate
 
 class DeliveryPlan(

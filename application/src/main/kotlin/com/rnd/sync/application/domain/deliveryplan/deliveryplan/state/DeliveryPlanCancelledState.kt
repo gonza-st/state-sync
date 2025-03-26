@@ -1,4 +1,4 @@
-package com.rnd.sync.application.domain.deliveryplan.state
+package com.rnd.sync.application.domain.deliveryplan.deliveryplan.state
 
 class DeliveryPlanCancelledState : DeliveryPlanState {
     override fun name(): String {

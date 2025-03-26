@@ -1,10 +1,10 @@
 package com.rnd.sync.integration
 
-import com.rnd.sync.application.domain.delivery.Delivery
-import com.rnd.sync.application.domain.delivery.state.DeliveryCancelledState
-import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
-import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan.DeliveryPlanId
-import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCancelledState
+import com.rnd.sync.application.domain.deliveryplan.delivery.Delivery
+import com.rnd.sync.application.domain.deliveryplan.delivery.state.DeliveryCancelledState
+import com.rnd.sync.application.domain.deliveryplan.deliveryplan.DeliveryPlan
+import com.rnd.sync.application.domain.deliveryplan.deliveryplan.DeliveryPlan.DeliveryPlanId
+import com.rnd.sync.application.domain.deliveryplan.deliveryplan.state.DeliveryPlanCancelledState
 import com.rnd.sync.application.domain.order.Order
 import com.rnd.sync.application.service.deliveryplan.`in`.CancelDeliveryPlanCase
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanCommandRepository

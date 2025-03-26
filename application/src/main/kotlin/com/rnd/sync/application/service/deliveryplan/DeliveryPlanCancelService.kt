@@ -1,7 +1,7 @@
 package com.rnd.sync.application.service.deliveryplan
 
-import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
-import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan.DeliveryPlanId
+import com.rnd.sync.application.domain.deliveryplan.deliveryplan.DeliveryPlan
+import com.rnd.sync.application.domain.deliveryplan.deliveryplan.DeliveryPlan.DeliveryPlanId
 import com.rnd.sync.application.service.deliveryplan.`in`.CancelDeliveryPlanCase
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanCommandRepository
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanQueryRepository
