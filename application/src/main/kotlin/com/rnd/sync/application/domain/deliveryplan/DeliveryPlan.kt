@@ -17,11 +17,12 @@ class DeliveryPlan(
     var status = status
         private set
 
-    lateinit var deliveries: List<Delivery>
-        private set
+    private val mutableDeliveries = mutableListOf<Delivery>()
+    val deliveries: List<Delivery>
+        get() = mutableDeliveries.toList()
 
-    fun mapDeliveries(deliveries: List<Delivery>) {
-        this.deliveries = deliveries
+    fun mapDelivery(delivery: Delivery) {
+        this.mutableDeliveries.add(delivery)
     }
 
     companion object {

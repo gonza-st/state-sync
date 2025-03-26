@@ -48,6 +48,7 @@ class Delivery(
     }
 
     fun mapDeliveryPlan(deliveryPlan: DeliveryPlan) {
+        deliveryPlan.mapDelivery(this)
         this.deliveryPlan = deliveryPlan
     }
 
@@ -58,9 +59,8 @@ class Delivery(
             destination: String,
             driverName: String,
             deliveryOrder: Int,
-            deliveryPlan: DeliveryPlan,
         ): Delivery {
-            val delivery = Delivery(
+            return Delivery(
                 orderId = OrderId(orderId),
                 orderNumber = orderNumber,
                 destination = destination,
@@ -68,9 +68,6 @@ class Delivery(
                 deliveryOrder = deliveryOrder,
                 status = DeliveryCreatedState()
             )
-
-            delivery.mapDeliveryPlan(deliveryPlan)
-            return delivery
         }
 
         fun createDelivery(

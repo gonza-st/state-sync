@@ -22,12 +22,11 @@ class DeliveryPlanService(
         val deliveryPlan = createDeliveryPlan(workingDate = request.deliveryDate)
         val orders = getOrders(rawOrderIds = request.orderNumbers)
 
-        val deliveries = createDeliveries(
+        createDeliveries(
             orders = orders,
             deliveryPlan = deliveryPlan,
         )
 
-        deliveryPlan.mapDeliveries(deliveries)
         return deliveryPlan
     }
 
@@ -47,16 +46,16 @@ class DeliveryPlanService(
     }
 
     private fun createDeliveries(orders: List<Order>, deliveryPlan: DeliveryPlan): List<Delivery> {
-        val deliveries = orders.mapIndexed { index, order ->
-            Delivery.createNewDelivery(
-                orderId = order.id.id,
-                orderNumber = order.orderNumber,
-                destination = order.receiver.address,
-                driverName = "best driver",
-                deliveryOrder = index,
-                deliveryPlan = deliveryPlan,
-            )
-        }
+        val deliveries = orders
+            .mapIndexed { index, order ->
+                Delivery.createNewDelivery(
+                    orderId = order.id.id,
+                    orderNumber = order.orderNumber,
+                    destination = order.receiver.address,
+                    driverName = "best driver",
+                    deliveryOrder = index,
+                )
+            }.onEach { it.mapDeliveryPlan(deliveryPlan) }
 
         val savedDeliveries = deliveries.map { deliveryRepository.save(it) }
         return savedDeliveries
