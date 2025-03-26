@@ -4,7 +4,7 @@ import com.rnd.sync.application.domain.delivery.Delivery.DeliveryId
 import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
 import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan.DeliveryPlanId
 
-interface DeliveryPlanRepository {
+interface DeliveryPlanQueryRepository {
     fun get(deliveryPlanId: DeliveryPlanId): DeliveryPlan
 
     fun getByDeliveryId(deliveryId: DeliveryId): DeliveryPlan

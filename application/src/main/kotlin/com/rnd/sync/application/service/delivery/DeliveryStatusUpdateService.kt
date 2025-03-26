@@ -9,18 +9,18 @@ import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
 import com.rnd.sync.application.service.delivery.`in`.UpdateDeliveryStatusCase
 import com.rnd.sync.application.service.delivery.`in`.UpdateDeliveryStatusCase.DeliveryStateUpdateRequest
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanCommandRepository
-import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanRepository
+import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanQueryRepository
 import org.springframework.stereotype.Service
 
 @Service
 class DeliveryStatusUpdateService(
-    private val deliveryPlanRepository: DeliveryPlanRepository,
+    private val deliveryPlanQueryRepository: DeliveryPlanQueryRepository,
     private val deliveryPlanCommandRepository: DeliveryPlanCommandRepository
 ): UpdateDeliveryStatusCase {
 
     override fun updateState(request: DeliveryStateUpdateRequest) {
         val deliveryId = DeliveryId(request.deliveryId)
-        val deliveryPlan = deliveryPlanRepository.getByDeliveryId(deliveryId)
+        val deliveryPlan = deliveryPlanQueryRepository.getByDeliveryId(deliveryId)
 
         changeStatus(
             status = request.status,

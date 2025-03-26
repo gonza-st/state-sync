@@ -21,7 +21,7 @@ class DeliveryPlanCommandRepositoryImpl(
     private val deliveryPlanJpaRepository: DeliveryPlanJpaRepository,
 ): DeliveryPlanCommandRepository {
 
-
+    @Transactional
     override fun save(deliveryPlan: DeliveryPlan): DeliveryPlan {
         val savedEntity = saveDeliveryPlan(deliveryPlan = deliveryPlan)
         val savedEntityId = savedEntity.id ?: throw EntityNotFoundException()
@@ -35,7 +35,7 @@ class DeliveryPlanCommandRepositoryImpl(
         return savedDeliveryPlan
     }
 
-
+    @Transactional
     override fun update(deliveryPlan: DeliveryPlan): DeliveryPlan {
         val updatedEntity = updateDeliveryPlan(deliveryPlan = deliveryPlan)
         val updatedEntityId = updatedEntity.id ?: throw EntityNotFoundException()

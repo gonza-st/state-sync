@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
+import org.springframework.test.annotation.DirtiesContext
 import kotlin.test.assertEquals
 
 @SpringBootTest(classes = [SyncApplication::class])
@@ -18,6 +19,7 @@ import kotlin.test.assertEquals
 @EntityScan(basePackages = ["com.rnd.sync"])
 @EnableJpaRepositories(basePackages = ["com.rnd.sync"])
 @ComponentScan(basePackages = ["com.rnd.sync"])
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class CreateOrderCaseTest {
 
     @Autowired

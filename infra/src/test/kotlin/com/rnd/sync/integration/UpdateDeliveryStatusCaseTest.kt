@@ -7,7 +7,7 @@ import com.rnd.sync.application.domain.order.Order
 import com.rnd.sync.application.service.delivery.`in`.UpdateDeliveryStatusCase
 import com.rnd.sync.application.service.delivery.`in`.UpdateDeliveryStatusCase.DeliveryStateUpdateRequest
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanCommandRepository
-import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanRepository
+import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanQueryRepository
 import com.rnd.sync.application.service.order.out.OrderRepository
 import com.rnd.sync.infra.web.SyncApplication
 import org.junit.jupiter.api.BeforeEach
@@ -19,6 +19,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
+import org.springframework.test.annotation.DirtiesContext
 import java.time.LocalDate
 import kotlin.test.assertEquals
 
@@ -27,13 +28,14 @@ import kotlin.test.assertEquals
 @EntityScan(basePackages = ["com.rnd.sync"])
 @EnableJpaRepositories(basePackages = ["com.rnd.sync"])
 @ComponentScan(basePackages = ["com.rnd.sync"])
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class UpdateDeliveryStatusCaseTest {
 
     @Autowired
     private lateinit var orderRepository: OrderRepository
 
     @Autowired
-    private lateinit var deliveryPlanRepository: DeliveryPlanRepository
+    private lateinit var deliveryPlanQueryRepository: DeliveryPlanQueryRepository
 
     @Autowired
     private lateinit var deliveryPlanCommandRepository: DeliveryPlanCommandRepository
@@ -54,15 +56,16 @@ class UpdateDeliveryStatusCaseTest {
 
     @Test
     fun `배송을 취소할 수 있다`() {
+        val rawDeliveryId = 2L
         val request = DeliveryStateUpdateRequest(
-            deliveryId = 1L,
+            deliveryId = rawDeliveryId,
             status = "cancelled"
         )
 
         updateDeliveryStatusCase.updateState(request)
 
-        val deliveryId = DeliveryId(1L)
-        val foundDeliveryPlan = deliveryPlanRepository.getByDeliveryId(deliveryId)
+        val deliveryId = DeliveryId(rawDeliveryId)
+        val foundDeliveryPlan = deliveryPlanQueryRepository.getByDeliveryId(deliveryId)
 
         val ex = assertThrows<IllegalStateException> {
             foundDeliveryPlan.cancelDelivery(deliveryId)

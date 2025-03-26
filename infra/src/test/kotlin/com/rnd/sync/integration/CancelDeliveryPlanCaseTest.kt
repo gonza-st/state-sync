@@ -8,7 +8,7 @@ import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCancelledS
 import com.rnd.sync.application.domain.order.Order
 import com.rnd.sync.application.service.deliveryplan.`in`.CancelDeliveryPlanCase
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanCommandRepository
-import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanRepository
+import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanQueryRepository
 import com.rnd.sync.application.service.order.out.OrderRepository
 import com.rnd.sync.infra.web.SyncApplication
 import org.junit.jupiter.api.BeforeEach
@@ -19,6 +19,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories
+import org.springframework.test.annotation.DirtiesContext
 import java.time.LocalDate
 import kotlin.test.assertEquals
 
@@ -27,13 +28,14 @@ import kotlin.test.assertEquals
 @EntityScan(basePackages = ["com.rnd.sync"])
 @EnableJpaRepositories(basePackages = ["com.rnd.sync"])
 @ComponentScan(basePackages = ["com.rnd.sync"])
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class CancelDeliveryPlanCaseTest {
 
     @Autowired
     private lateinit var orderRepository: OrderRepository
 
     @Autowired
-    private lateinit var deliveryPlanRepository: DeliveryPlanRepository
+    private lateinit var deliveryPlanQueryRepository: DeliveryPlanQueryRepository
 
     @Autowired
     private lateinit var deliveryPlanCommandRepository: DeliveryPlanCommandRepository
@@ -59,7 +61,7 @@ class CancelDeliveryPlanCaseTest {
         val cancelledDeliveryPlan = cancelDeliveryPlanCase.cancelPlan(rawDeliveryPlanId)
         assertEquals(DeliveryPlanCancelledState().name(), cancelledDeliveryPlan.status.name())
 
-        val foundDeliveryPlan = deliveryPlanRepository.get(DeliveryPlanId(rawDeliveryPlanId))
+        val foundDeliveryPlan = deliveryPlanQueryRepository.get(DeliveryPlanId(rawDeliveryPlanId))
         assertEquals(DeliveryPlanCancelledState().name(), foundDeliveryPlan.status.name())
     }
 
@@ -72,7 +74,7 @@ class CancelDeliveryPlanCaseTest {
             assertEquals(DeliveryCancelledState().name(), it.status.name())
         }
 
-        val foundDeliveryPlan = deliveryPlanRepository.get(DeliveryPlanId(rawDeliveryPlanId))
+        val foundDeliveryPlan = deliveryPlanQueryRepository.get(DeliveryPlanId(rawDeliveryPlanId))
         foundDeliveryPlan.deliveries.forEach {
             assertEquals(DeliveryCancelledState().name(), it.status.name())
         }

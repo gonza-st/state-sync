@@ -1,10 +1,9 @@
 package com.rnd.sync.infra.persistence.deliveryplan
 
-import com.rnd.sync.application.domain.delivery.Delivery
 import com.rnd.sync.application.domain.delivery.Delivery.DeliveryId
 import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
 import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan.DeliveryPlanId
-import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanRepository
+import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanQueryRepository
 import com.rnd.sync.infra.persistence.delivery.entity.DeliveryEntity
 import com.rnd.sync.infra.persistence.delivery.entity.DeliveryEntityMapper
 import com.rnd.sync.infra.persistence.delivery.jpa.DeliveryJpaRepository
@@ -15,12 +14,12 @@ import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Repository
 
 @Repository
-class DeliveryPlanRepositoryImpl(
+class DeliveryPlanQueryRepositoryImpl(
     private val deliveryEntityMapper: DeliveryEntityMapper,
     private val deliveryJpaRepository: DeliveryJpaRepository,
     private val deliveryPlanEntityMapper: DeliveryPlanEntityMapper,
     private val deliveryPlanJpaRepository: DeliveryPlanJpaRepository,
-) : DeliveryPlanRepository {
+) : DeliveryPlanQueryRepository {
     override fun get(deliveryPlanId: DeliveryPlanId): DeliveryPlan {
         val deliveryPlanEntity = getDeliveryPlanEntityById(deliveryPlanId)
         val deliveryEntities = getAllDeliveriesByDeliveryId(deliveryPlanId)
