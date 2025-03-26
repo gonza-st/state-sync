@@ -11,7 +11,7 @@ import com.rnd.sync.application.service.order.out.OrderRepository
 import org.springframework.stereotype.Service
 
 @Service
-class DeliveryPlanService(
+class DeliveryPlanCreateService(
     private val orderRepository: OrderRepository,
     private val deliveryPlanRepository: DeliveryPlanRepository
 ) : CreateDeliveryPlanCase {

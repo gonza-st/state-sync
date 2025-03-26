@@ -2,6 +2,7 @@ package com.rnd.sync.infra.persistence.deliveryplan
 
 import com.rnd.sync.application.domain.delivery.Delivery
 import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan
+import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan.DeliveryPlanId
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanRepository
 import com.rnd.sync.infra.persistence.delivery.entity.DeliveryEntity
 import com.rnd.sync.infra.persistence.delivery.entity.DeliveryEntityMapper
@@ -17,7 +18,8 @@ class DeliveryPlanRepositoryImpl(
     private val deliveryEntityMapper: DeliveryEntityMapper,
     private val deliveryJpaRepository: DeliveryJpaRepository,
     private val deliveryPlanEntityMapper: DeliveryPlanEntityMapper,
-    private val deliveryPLanJpaRepository: DeliveryPlanJpaRepository,
+    private val deliveryPlanJpaRepository: DeliveryPlanJpaRepository,
+    private val deliveryJpaRepository: DeliveryJpaRepository,
 ) : DeliveryPlanRepository {
 
     override fun save(deliveryPlan: DeliveryPlan): DeliveryPlan {
@@ -52,5 +54,17 @@ class DeliveryPlanRepositoryImpl(
         val entities = deliveries.map { deliveryEntityMapper.fromDeliveryToNewDeliveryEntity(it, deliveryPlanId) }
         val savedEntities = deliveryJpaRepository.saveAll(entities)
         return savedEntities
+    }
+
+    override fun get(deliveryPlanId: DeliveryPlanId): DeliveryPlan {
+        val deliveryPlanEntity = deliveryPlanJpaRepository.findById(deliveryPlanId.id)
+            .orElseThrow { EntityNotFoundException() }
+        val deliveryPlan = deliveryPlanEntityMapper.fromDeliveryPlanEntityToDeliveryPlanDomain(deliveryPlanEntity)
+
+        val deliveryEntities = deliveryJpaRepository.findAllByDeliveryPlanId(deliveryPlan.id.id)
+        val deliveryComposites = deliveryEntities.map { deliveryEntityMapper.fromDeliveryEntityToDeliveryComposite(it) }
+
+        deliveryComposites.forEach { it.mapDeliveryPlan(deliveryPlan) }
+        return deliveryPlan
     }
 }

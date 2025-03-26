@@ -1,6 +1,7 @@
 package com.rnd.sync.application.domain.deliveryplan
 
-import com.rnd.sync.application.domain.delivery.Delivery
+import com.rnd.sync.application.domain.delivery.DeliveryComposite
+import com.rnd.sync.application.domain.delivery.state.DeliveryCancelledState
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCancelledState
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCreatedState
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanState
@@ -23,6 +24,23 @@ class DeliveryPlan(
 
     fun mapDelivery(delivery: Delivery) {
         this.mutableDeliveries.add(delivery)
+    }
+
+    fun cancel() {
+        deliveries.forEach { it.cancel() }
+    }
+
+    fun syncStatus() {
+        if (isAllCancelled()) {
+            status = status.cancel()
+        }
+    }
+
+    private fun isAllCancelled(): Boolean {
+        val result = deliveries
+            .filter { it.status is DeliveryCancelledState }
+
+        return deliveries.size == result.size
     }
 
     companion object {
