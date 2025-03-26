@@ -1,6 +1,8 @@
 package com.rnd.sync.application.domain.delivery.state
 
 interface DeliveryState {
+    fun name(): String
+
     fun create(): DeliveryState
 
     fun start(): DeliveryState

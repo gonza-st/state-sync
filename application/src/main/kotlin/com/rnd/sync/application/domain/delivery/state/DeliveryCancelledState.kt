@@ -1,6 +1,10 @@
 package com.rnd.sync.application.domain.delivery.state
 
 class DeliveryCancelledState:  DeliveryState {
+    override fun name(): String {
+        return "cancelled"
+    }
+
     override fun create():  DeliveryState {
         throw IllegalStateException("취소 상태에서는 상태를 바꿀 수 없다")
     }

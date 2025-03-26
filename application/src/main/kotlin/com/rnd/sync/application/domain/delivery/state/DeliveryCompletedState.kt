@@ -1,6 +1,10 @@
 package com.rnd.sync.application.domain.delivery.state
 
 class DeliveryCompletedState: DeliveryState {
+    override fun name(): String {
+        return "completed"
+    }
+
     override fun create(): DeliveryState {
         throw IllegalStateException("완료 상태에서는 상태를 바꿀 수 없다")
     }

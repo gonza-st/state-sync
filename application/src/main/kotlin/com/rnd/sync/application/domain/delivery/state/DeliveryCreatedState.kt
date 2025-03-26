@@ -1,6 +1,10 @@
 package com.rnd.sync.application.domain.delivery.state
 
 class DeliveryCreatedState:  DeliveryState {
+    override fun name(): String {
+        return "created"
+    }
+
     override fun create():  DeliveryState {
         throw IllegalStateException("생성됨 상태에서 생성됨이 될 수 없습니다.")
     }

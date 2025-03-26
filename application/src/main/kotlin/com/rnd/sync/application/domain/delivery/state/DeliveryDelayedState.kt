@@ -1,6 +1,10 @@
 package com.rnd.sync.application.domain.delivery.state
 
 class DeliveryDelayedState:  DeliveryState {
+    override fun name(): String {
+        return "delayed"
+    }
+
     override fun create():  DeliveryState {
         throw IllegalStateException("지연 상태에서는 상태를 바꿀 수 없다")
     }

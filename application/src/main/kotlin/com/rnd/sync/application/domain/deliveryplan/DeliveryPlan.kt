@@ -1,5 +1,6 @@
 package com.rnd.sync.application.domain.deliveryplan
 
+import com.rnd.sync.application.domain.delivery.Delivery
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCancelledState
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCreatedState
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanState
@@ -15,6 +16,13 @@ class DeliveryPlan(
 
     var status = status
         private set
+
+    lateinit var deliveries: List<Delivery>
+        private set
+
+    fun mapDeliveries(deliveries: List<Delivery>) {
+        this.deliveries = deliveries
+    }
 
     companion object {
         fun createNewDeliveryPlan(

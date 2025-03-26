@@ -14,7 +14,7 @@ class DeliveryPlanEntityMapper {
     }
 
     fun fromDeliveryPlanEntityToDeliveryPlanDomain(deliveryPlanEntity: DeliveryPlanEntity): DeliveryPlan {
-        val deliveryPlanId = deliveryPlanEntity.id ?: throw IllegalArgumentException("Order with id $id not found")
+        val deliveryPlanId = deliveryPlanEntity.id ?: throw IllegalArgumentException("DeliveryPlan with id $id not found")
 
         return DeliveryPlan.createDeliveryPlan(
             id = deliveryPlanId,
