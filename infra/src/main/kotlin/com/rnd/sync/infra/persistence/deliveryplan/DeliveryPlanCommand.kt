@@ -4,7 +4,7 @@ import com.rnd.sync.infra.persistence.deliveryplan.jpa.DeliveryPlanJpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-class DeliveryPlanRepository(
-    private val deliveryPlanJpaRepository: DeliveryPlanJpaRepository
+class DeliveryPlanCommand(
+    private val deliveryPlanJpaRepository: DeliveryPlanJpaRepository,
 ) {
 }
