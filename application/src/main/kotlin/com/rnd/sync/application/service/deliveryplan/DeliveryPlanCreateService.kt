@@ -6,7 +6,7 @@ import com.rnd.sync.application.domain.order.Order
 import com.rnd.sync.application.domain.order.Order.OrderId
 import com.rnd.sync.application.service.deliveryplan.`in`.CreateDeliveryPlanCase
 import com.rnd.sync.application.service.deliveryplan.`in`.CreateDeliveryPlanCase.DeliveryPlanRequest
-import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanRepository
+import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanCommandRepository
 import com.rnd.sync.application.service.order.out.OrderRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDate
@@ -14,7 +14,7 @@ import java.time.LocalDate
 @Service
 class DeliveryPlanCreateService(
     private val orderRepository: OrderRepository,
-    private val deliveryPlanRepository: DeliveryPlanRepository
+    private val deliveryPlanCommandRepository: DeliveryPlanCommandRepository
 ) : CreateDeliveryPlanCase {
 
     override fun create(request: DeliveryPlanRequest): DeliveryPlan {
@@ -25,7 +25,7 @@ class DeliveryPlanCreateService(
             orders = orders
         )
 
-        val savedDeliveryPlan = deliveryPlanRepository.save(deliveryPlan)
+        val savedDeliveryPlan = deliveryPlanCommandRepository.save(deliveryPlan)
         return savedDeliveryPlan
     }
 

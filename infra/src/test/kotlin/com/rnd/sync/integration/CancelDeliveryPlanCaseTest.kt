@@ -7,6 +7,7 @@ import com.rnd.sync.application.domain.deliveryplan.DeliveryPlan.DeliveryPlanId
 import com.rnd.sync.application.domain.deliveryplan.state.DeliveryPlanCancelledState
 import com.rnd.sync.application.domain.order.Order
 import com.rnd.sync.application.service.deliveryplan.`in`.CancelDeliveryPlanCase
+import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanCommandRepository
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanRepository
 import com.rnd.sync.application.service.order.out.OrderRepository
 import com.rnd.sync.infra.web.SyncApplication
@@ -33,6 +34,9 @@ class CancelDeliveryPlanCaseTest {
 
     @Autowired
     private lateinit var deliveryPlanRepository: DeliveryPlanRepository
+
+    @Autowired
+    private lateinit var deliveryPlanCommandRepository: DeliveryPlanCommandRepository
 
     @Autowired
     private lateinit var cancelDeliveryPlanCase: CancelDeliveryPlanCase
@@ -82,7 +86,7 @@ class CancelDeliveryPlanCaseTest {
         val deliveries = savedOrders.mapIndexed { index, order -> createDelivery(index, order) }
         deliveries.forEach { it.mapDeliveryPlan(deliveryPlan) }
 
-        val savedDeliveryPlan = deliveryPlanRepository.save(deliveryPlan)
+        val savedDeliveryPlan = deliveryPlanCommandRepository.save(deliveryPlan)
         return savedDeliveryPlan
     }
 
