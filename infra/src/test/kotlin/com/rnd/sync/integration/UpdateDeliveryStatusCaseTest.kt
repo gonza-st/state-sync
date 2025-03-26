@@ -4,6 +4,8 @@ import com.rnd.sync.application.domain.deliveryplan.delivery.Delivery
 import com.rnd.sync.application.domain.deliveryplan.delivery.Delivery.DeliveryId
 import com.rnd.sync.application.domain.deliveryplan.deliveryplan.DeliveryPlan
 import com.rnd.sync.application.domain.order.Order
+import com.rnd.sync.application.domain.order.Order.OrderId
+import com.rnd.sync.application.domain.order.state.OrderCancelledState
 import com.rnd.sync.application.service.deliveryplan.`in`.UpdateDeliveryStatusCase
 import com.rnd.sync.application.service.deliveryplan.`in`.UpdateDeliveryStatusCase.DeliveryStateUpdateRequest
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanCommandRepository
@@ -28,7 +30,7 @@ import kotlin.test.assertEquals
 @EntityScan(basePackages = ["com.rnd.sync"])
 @EnableJpaRepositories(basePackages = ["com.rnd.sync"])
 @ComponentScan(basePackages = ["com.rnd.sync"])
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class UpdateDeliveryStatusCaseTest {
 
     @Autowired
@@ -56,7 +58,7 @@ class UpdateDeliveryStatusCaseTest {
 
     @Test
     fun `배송을 취소할 수 있다`() {
-        val rawDeliveryId = 2L
+        val rawDeliveryId = 1L
         val request = DeliveryStateUpdateRequest(
             deliveryId = rawDeliveryId,
             status = "cancelled"
@@ -72,6 +74,21 @@ class UpdateDeliveryStatusCaseTest {
         }
 
         assertEquals("이미 취소된 상태입니다", ex.message)
+    }
+
+    @Test
+    fun `배송이 취소되면 해당 주문도 취소된다`() {
+        val rawDeliveryId = 1L
+        val request = DeliveryStateUpdateRequest(
+            deliveryId = rawDeliveryId,
+            status = "cancelled"
+        )
+
+        updateDeliveryStatusCase.updateState(request)
+
+        val orderId = OrderId(rawDeliveryId)
+        val order = orderRepository.get(orderId)
+        assertEquals(OrderCancelledState().name(), order.status.name())
     }
 
     private fun createDeliveryPlan(): DeliveryPlan {

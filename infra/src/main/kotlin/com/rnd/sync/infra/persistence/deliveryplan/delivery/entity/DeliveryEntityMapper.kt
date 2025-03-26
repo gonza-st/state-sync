@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 class DeliveryEntityMapper {
     fun fromDeliveryToNewDeliveryEntity(delivery: Delivery, deliveryPlanId: Long): DeliveryEntity {
         return DeliveryEntity(
-            orderId = delivery.orderId.id,
+            orderId = delivery.orderId,
             orderNumber = delivery.orderNumber,
             destination = delivery.destination,
             driverName = delivery.driverName,
@@ -20,7 +20,7 @@ class DeliveryEntityMapper {
     fun fromDeliveryToDeliveryEntity(delivery: Delivery, deliveryPlanId: Long): DeliveryEntity {
         return DeliveryEntity(
             id = delivery.id.id,
-            orderId = delivery.orderId.id,
+            orderId = delivery.orderId,
             orderNumber = delivery.orderNumber,
             destination = delivery.destination,
             driverName = delivery.driverName,
