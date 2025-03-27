@@ -13,8 +13,4 @@ class OrderEventPublisherImpl(
     override fun publishOrderCancelledEvent(event: DomainEvent<OrderCancelledEvent.Payload>) {
         applicationEventPublisher.publishEvent(event)
     }
-
-    override fun test() {
-        TODO("Not yet implemented")
-    }
 }

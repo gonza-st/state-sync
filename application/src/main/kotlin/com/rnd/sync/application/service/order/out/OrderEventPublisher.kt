@@ -5,6 +5,4 @@ import com.rnd.sync.common.event.delivery.OrderCancelledEvent
 
 interface OrderEventPublisher {
     fun publishOrderCancelledEvent(event: DomainEvent<OrderCancelledEvent.Payload>)
-
-    fun test()
 }
