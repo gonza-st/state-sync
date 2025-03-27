@@ -20,23 +20,12 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":application"))
-    implementation(project(":common"))
-
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-    // H2 데이터베이스
-    runtimeOnly("com.h2database:h2")
-
-    // MockK 의존성
-    testImplementation("io.mockk:mockk:1.13.5")
-    testImplementation("com.ninja-squad:springmockk:4.0.2")
 }
 
 kotlin {

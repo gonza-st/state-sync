@@ -7,11 +7,10 @@ import com.rnd.sync.application.domain.deliveryplan.delivery.state.DeliveryDelay
 import com.rnd.sync.application.domain.deliveryplan.delivery.state.DeliveryStartedState
 import com.rnd.sync.application.domain.deliveryplan.delivery.state.DeliveryState
 import com.rnd.sync.application.domain.deliveryplan.deliveryplan.DeliveryPlan
-import com.rnd.sync.application.domain.order.Order.OrderId
 
 class Delivery(
     private val deliveryId: DeliveryId? = null,
-    val orderId: OrderId,
+    val orderId: Long,
     val orderNumber: String,
     val destination: String,
     val driverName: String,
@@ -62,7 +61,7 @@ class Delivery(
             deliveryOrder: Int,
         ): Delivery {
             return Delivery(
-                orderId = OrderId(orderId),
+                orderId = orderId,
                 orderNumber = orderNumber,
                 destination = destination,
                 driverName = driverName,
@@ -93,7 +92,7 @@ class Delivery(
 
             return Delivery(
                 deliveryId = DeliveryId(id),
-                orderId = OrderId(orderId),
+                orderId = orderId,
                 orderNumber = orderNumber,
                 destination = destination,
                 driverName = driverName,

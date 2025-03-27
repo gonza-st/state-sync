@@ -6,6 +6,7 @@ import com.rnd.sync.application.domain.deliveryplan.delivery.state.DeliveryCance
 import com.rnd.sync.application.domain.deliveryplan.deliveryplan.state.DeliveryPlanCancelledState
 import com.rnd.sync.application.domain.deliveryplan.deliveryplan.state.DeliveryPlanCreatedState
 import com.rnd.sync.application.domain.deliveryplan.deliveryplan.state.DeliveryPlanState
+import com.rnd.sync.application.domain.order.Order
 import java.time.LocalDate
 
 class DeliveryPlan(
@@ -55,6 +56,11 @@ class DeliveryPlan(
         delivery.cancel()
     }
 
+    fun cancelDeliveryByOrderId(orderId: Long) {
+        val delivery = findDeliveryByOrderId(orderId)
+        delivery.cancel()
+    }
+
     fun delayDelivery(id: DeliveryId) {
         val delivery = findDelivery(id)
         delivery.delay()
@@ -65,9 +71,19 @@ class DeliveryPlan(
         delivery.complete()
     }
 
+    // fixme
+    fun getDelivery(id: DeliveryId): Delivery {
+        return findDelivery(id)
+    }
+
     private fun findDelivery(id: DeliveryId): Delivery {
         val result = deliveries.find { it.id == id }
         return result ?: throw IllegalArgumentException("해당 id 없음")
+    }
+
+    private fun findDeliveryByOrderId(orderId: Long): Delivery {
+        val result = deliveries.find { it.orderId == orderId }
+        return result ?: throw IllegalArgumentException("해당 order id 없음")
     }
 
     companion object {

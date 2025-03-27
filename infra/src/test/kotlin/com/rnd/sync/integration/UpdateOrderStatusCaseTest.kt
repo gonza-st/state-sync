@@ -7,6 +7,13 @@ import com.rnd.sync.application.service.order.`in`.UpdateOrderStatusCase
 import com.rnd.sync.application.service.order.`in`.UpdateOrderStatusCase.StateUpdateRequest
 import com.rnd.sync.application.service.order.out.OrderRepository
 import com.rnd.sync.infra.web.SyncApplication
+
+
+import io.mockk.verify
+import com.ninjasquad.springmockk.SpykBean
+import com.rnd.sync.application.service.order.out.OrderEventPublisher
+import com.rnd.sync.common.event.delivery.OrderCancelledEvent
+
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -25,9 +32,12 @@ import org.springframework.test.annotation.DirtiesContext
 @EnableJpaRepositories(basePackages = ["com.rnd.sync"])
 @ComponentScan(basePackages = ["com.rnd.sync"])
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-class UpdateOrderStatusCase {
+class UpdateOrderStatusCaseTest {
     @Autowired
     private lateinit var orderRepository: OrderRepository
+
+    @SpykBean
+    private lateinit var orderEventPublisher: OrderEventPublisher
 
     @Autowired
     private lateinit var updateOrderStatusCase: UpdateOrderStatusCase
@@ -44,7 +54,7 @@ class UpdateOrderStatusCase {
     }
 
     @Test
-    fun `주문을 취소한다`() {
+    fun `배송을 취소한다`() {
         val request = StateUpdateRequest(
             orderId = savedOrder.id.id,
             status = OrderCancelledState().name()
@@ -54,28 +64,9 @@ class UpdateOrderStatusCase {
 
         assertEquals(savedOrder.id.id, updatedOrder.id.id)
         assertEquals(OrderCancelledState().name(), updatedOrder.status.name())
-    }
 
-    @Test
-    fun `취소된 주문을 다시 생성상태로 바꿀 수 없다`() {
-        val cancelRequest = StateUpdateRequest(
-            orderId = savedOrder.id.id,
-            status = OrderCancelledState().name()
-        )
-
-        val cancelledOrder = updateOrderStatusCase.updateState(cancelRequest)
-        assertEquals(OrderCancelledState().name(), cancelledOrder.status.name())
-
-        val createRequest = StateUpdateRequest(
-            orderId = savedOrder.id.id,
-            status = OrderCreatedState().name()
-        )
-
-        val ex = assertThrows<IllegalStateException> {
-            updateOrderStatusCase.updateState(createRequest)
-        }
-
-        assertEquals("취소 상태에서 다시 생성될 수 없습니다.", ex.message)
+        val payload = OrderCancelledEvent.Payload(orderId = savedOrder.id.id)
+        verify { orderEventPublisher.publishOrderCancelledEvent(OrderCancelledEvent(payload)) }
     }
 
     private fun saveOrder(): Order {

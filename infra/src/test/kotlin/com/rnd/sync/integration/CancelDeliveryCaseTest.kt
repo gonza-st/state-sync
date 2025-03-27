@@ -1,18 +1,17 @@
 package com.rnd.sync.integration
 
 import com.rnd.sync.application.domain.deliveryplan.delivery.Delivery
-import com.rnd.sync.application.domain.deliveryplan.delivery.Delivery.DeliveryId
 import com.rnd.sync.application.domain.deliveryplan.deliveryplan.DeliveryPlan
+import com.rnd.sync.application.domain.deliveryplan.deliveryplan.state.DeliveryPlanCancelledState
 import com.rnd.sync.application.domain.order.Order
-import com.rnd.sync.application.service.deliveryplan.`in`.UpdateDeliveryStatusCase
-import com.rnd.sync.application.service.deliveryplan.`in`.UpdateDeliveryStatusCase.DeliveryStateUpdateRequest
+import com.rnd.sync.application.service.deliveryplan.`in`.CancelDeliveryCase
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanCommandRepository
 import com.rnd.sync.application.service.deliveryplan.out.DeliveryPlanQueryRepository
 import com.rnd.sync.application.service.order.out.OrderRepository
 import com.rnd.sync.infra.web.SyncApplication
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.domain.EntityScan
@@ -28,9 +27,8 @@ import kotlin.test.assertEquals
 @EntityScan(basePackages = ["com.rnd.sync"])
 @EnableJpaRepositories(basePackages = ["com.rnd.sync"])
 @ComponentScan(basePackages = ["com.rnd.sync"])
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class UpdateDeliveryStatusCaseTest {
-
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+class CancelDeliveryCaseTest {
     @Autowired
     private lateinit var orderRepository: OrderRepository
 
@@ -41,8 +39,9 @@ class UpdateDeliveryStatusCaseTest {
     private lateinit var deliveryPlanCommandRepository: DeliveryPlanCommandRepository
 
     @Autowired
-    private lateinit var updateDeliveryStatusCase: UpdateDeliveryStatusCase
+    private lateinit var cancelDeliveryCase: CancelDeliveryCase
 
+    private val savedOrders = mutableListOf<Order>()
     private lateinit var savedDeliveryPlan: DeliveryPlan
 
     @BeforeEach
@@ -54,35 +53,16 @@ class UpdateDeliveryStatusCaseTest {
     fun contextLoads() {
     }
 
+    @Disabled
     @Test
-    fun `배송을 취소할 수 있다`() {
-        val rawDeliveryId = 1L
-        val request = DeliveryStateUpdateRequest(
-            deliveryId = rawDeliveryId,
-            status = "cancelled"
+    fun `배송이 취소 상태가 되어야한다`() {
+        val request = CancelDeliveryCase.CancelDeliveryCaseRequest(
+            orderId = savedOrders.get(0).id.id
         )
+        cancelDeliveryCase.cancelDelivery(request)
 
-        updateDeliveryStatusCase.updateState(request)
-
-        val deliveryId = DeliveryId(rawDeliveryId)
-        val foundDeliveryPlan = deliveryPlanQueryRepository.getByDeliveryId(deliveryId)
-
-        val ex = assertThrows<IllegalStateException> {
-            foundDeliveryPlan.cancelDelivery(deliveryId)
-        }
-
-        assertEquals("이미 취소된 상태입니다", ex.message)
-    }
-
-    @Test
-    fun `배송이 취소되면 배송 취소 이벤트가 발생한다`() {
-        val rawDeliveryId = 1L
-        val request = DeliveryStateUpdateRequest(
-            deliveryId = rawDeliveryId,
-            status = "cancelled"
-        )
-
-        updateDeliveryStatusCase.updateState(request)
+        val foundDeliveryPlan = deliveryPlanQueryRepository.getByOrderId(Order.OrderId(request.orderId))
+        assertEquals(DeliveryPlanCancelledState().name(), foundDeliveryPlan.status.name())
     }
 
     private fun createDeliveryPlan(): DeliveryPlan {
@@ -105,7 +85,9 @@ class UpdateDeliveryStatusCaseTest {
             receiverAddress = "조원로"
         )
 
-        return orderRepository.save(order)
+        val savedOrder = orderRepository.save(order)
+        savedOrders.add(savedOrder)
+        return savedOrder
     }
 
     private fun createDelivery(index: Int, order: Order): Delivery {

@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service
 @Service
 class DeliveryStatusUpdateService(
     private val deliveryPlanQueryRepository: DeliveryPlanQueryRepository,
-    private val deliveryPlanCommandRepository: DeliveryPlanCommandRepository
-): UpdateDeliveryStatusCase {
+    private val deliveryPlanCommandRepository: DeliveryPlanCommandRepository,
+) : UpdateDeliveryStatusCase {
 
     override fun updateState(request: DeliveryStateUpdateRequest) {
         val deliveryId = DeliveryId(request.deliveryId)
@@ -40,7 +40,8 @@ class DeliveryStatusUpdateService(
             DeliveryStartedState().name() -> deliveryPlan.startDelivery(deliveryId)
             DeliveryDelayedState().name() -> deliveryPlan.delayDelivery(deliveryId)
             DeliveryCompletedState().name() -> deliveryPlan.completeDelivery(deliveryId)
-            DeliveryCancelledState().name() -> deliveryPlan.cancelDelivery(deliveryId)
+            DeliveryCancelledState().name() -> { deliveryPlan.cancelDelivery(deliveryId) }
+
             else -> throw IllegalStateException("invalid status: >> $status")
         }
     }
