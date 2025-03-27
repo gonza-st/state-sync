@@ -44,7 +44,7 @@ class CreateDeliveryPlanCaseTest {
     }
 
     @Test
-    fun `배차 계획을 생성한다`() {
+    fun `배송 계획을 생성한다`() {
         val rawOrderIds = savedOrders.map { it.id.id }
         val request = DeliveryPlanRequest(
             deliveryDate = LocalDate.of(2025, 1, 1),

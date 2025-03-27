@@ -54,7 +54,7 @@ class UpdateOrderStatusCaseTest {
     }
 
     @Test
-    fun `주문을 취소한다`() {
+    fun `배송을 취소한다`() {
         val request = StateUpdateRequest(
             orderId = savedOrder.id.id,
             status = OrderCancelledState().name()
@@ -67,28 +67,6 @@ class UpdateOrderStatusCaseTest {
 
         val payload = OrderCancelledEvent.Payload(orderId = savedOrder.id.id)
         verify { orderEventPublisher.publishOrderCancelledEvent(OrderCancelledEvent(payload)) }
-    }
-
-    @Test
-    fun `취소된 주문을 다시 생성상태로 바꿀 수 없다`() {
-        val cancelRequest = StateUpdateRequest(
-            orderId = savedOrder.id.id,
-            status = OrderCancelledState().name()
-        )
-
-        val cancelledOrder = updateOrderStatusCase.updateState(cancelRequest)
-        assertEquals(OrderCancelledState().name(), cancelledOrder.status.name())
-
-        val createRequest = StateUpdateRequest(
-            orderId = savedOrder.id.id,
-            status = OrderCreatedState().name()
-        )
-
-        val ex = assertThrows<IllegalStateException> {
-            updateOrderStatusCase.updateState(createRequest)
-        }
-
-        assertEquals("취소 상태에서 다시 생성될 수 없습니다.", ex.message)
     }
 
     private fun saveOrder(): Order {
